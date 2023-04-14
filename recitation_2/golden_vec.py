@@ -1,9 +1,8 @@
 import numpy as np
 from scipy.optimize import RootResults
 
-def minimize_scalar_vec(f: callable,  bracket: tuple[float|np.ndarray], tol=1e-10):
-  return root_scalar_vec(lambda x: f(x)**2)
-def root_scalar_vec(f: callable, bracket: tuple[float|np.ndarray], tol=1e-10)->RootResults:
+
+def root_scalar_vec(f: callable, bracket: tuple, tol=1e-10)->RootResults:
   """
   Find a root of a scalar function in a vectorized way
   
@@ -19,10 +18,10 @@ def root_scalar_vec(f: callable, bracket: tuple[float|np.ndarray], tol=1e-10)->R
   """
   a = np.atleast_1d(bracket[0])
   b = np.atleast_1d(bracket[1])
-  if len(a)==1:
-    a = np.ones_like(f(a))*a
-  if len(b)==1:
-    b = np.ones_like(f(b))*b    
+  if len(a)==1 and len(b)>1:
+    a = np.ones_like(len(b))*a
+  elif len(b)==1 and len(a)>1:
+    b = np.ones_like(len(a))*b    
   alpha1=(3-np.sqrt(5))/2
   alpha2=(np.sqrt(5)-1)/2
   d=b-a
